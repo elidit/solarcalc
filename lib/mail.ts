@@ -1,7 +1,11 @@
 import { Resend } from 'resend';
-import { getRequiredEnvVar } from './env';
 
-const resend = new Resend(getRequiredEnvVar('RESEND_API_KEY'));
+const apiKey = process.env.RESEND_API_KEY;
+if (!apiKey) {
+  throw new Error("RESEND_API_KEY is missing. Check your .env.local file.");
+}
+
+const resend = new Resend(apiKey);
 
 export async function sendCalculationEmail(to: string, data: {
   panelCount: number;
