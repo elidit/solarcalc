@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Sun, Battery, LineChart, Mail } from 'lucide-react';
+import { Sun, Battery, Mail } from 'lucide-react';
+
 
 export default function LandingPage() {
   return (
@@ -45,7 +46,7 @@ export default function LandingPage() {
           </div>
           
           <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-            <LineChart className="w-10 h-10 text-yellow-500 mb-4" />
+            {/*<LineChart className="w-10 h-10 text-yellow-500 mb-4" />*/}
             <h3 className="text-xl font-semibold mb-2">Instant Analysis</h3>
             <p className="text-muted-foreground">
               Receive immediate results showing panel count, potential wattage, and
