@@ -28,6 +28,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
+// Define the form schema using zod
 const formSchema = z.object({
   email: z.string().email(),
   address: z.string().min(10, "Please enter a complete address"),
@@ -46,7 +47,6 @@ const formSchema = z.object({
   ]),
 });
 
-
 export default function Calculator() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -56,9 +56,9 @@ export default function Calculator() {
     defaultValues: {
       email: "",
       address: "",
-      roofLength: 0,
-      roofWidth: 0,
-      roofPitch: 0,
+      roofLength: undefined, // Allow undefined to represent empty fields
+      roofWidth: undefined,
+      roofPitch: undefined,
       roofOrientation: "south",
     },
   });
@@ -151,7 +151,13 @@ export default function Calculator() {
                     <FormItem>
                       <FormLabel>Roof Length (meters)</FormLabel>
                       <FormControl>
-                        <Input type="number" step="0.1" {...field} />
+                        <Input
+                          type="number"
+                          step="0.1"
+                          {...field}
+                          onChange={(e) => field.onChange(e.target.value === "" ? undefined : parseFloat(e.target.value))}
+                          value={field.value === undefined ? "" : field.value}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -165,7 +171,13 @@ export default function Calculator() {
                     <FormItem>
                       <FormLabel>Roof Width (meters)</FormLabel>
                       <FormControl>
-                        <Input type="number" step="0.1" {...field} />
+                        <Input
+                          type="number"
+                          step="0.1"
+                          {...field}
+                          onChange={(e) => field.onChange(e.target.value === "" ? undefined : parseFloat(e.target.value))}
+                          value={field.value === undefined ? "" : field.value}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -181,7 +193,15 @@ export default function Calculator() {
                     <FormItem>
                       <FormLabel>Roof Pitch (degrees)</FormLabel>
                       <FormControl>
-                        <Input type="number" min="0" max="45" {...field} />
+                        <Input
+                          type="number"
+                          min="0"
+                          max="45"
+                          step="1"
+                          {...field}
+                          onChange={(e) => field.onChange(e.target.value === "" ? undefined : parseFloat(e.target.value))}
+                          value={field.value === undefined ? "" : field.value}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
