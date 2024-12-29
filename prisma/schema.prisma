@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model SolarCalculation {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email           String
+  address         String
+  roofLength      Float    @map("roof_length")
+  roofWidth       Float    @map("roof_width")
+  roofPitch       Float    @map("roof_pitch")
+  roofOrientation String   @map("roof_orientation")
+  panelCount      Int      @map("panel_count")
+  totalWattage    Float    @map("total_wattage")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("solar_calculations")
+}

@@ -1,4 +1,5 @@
-import { getSupabaseClient } from './supabase';
+import { prisma } from './prisma';
+import { sendCalculationEmail } from './mail';
 import { SolarCalculation } from './calculations';
 
 export interface SolarCalculationRecord extends SolarCalculation {
@@ -10,20 +11,24 @@ export async function saveSolarCalculation(data: SolarCalculationRecord, results
   panelCount: number;
   totalWattage: number;
 }) {
-  const supabase = getSupabaseClient();
-  
-  const { error } = await supabase.from("solar_calculations").insert({
-    email: data.email,
-    address: data.address,
-    roof_length: data.roofLength,
-    roof_width: data.roofWidth,
-    roof_pitch: data.roofPitch,
-    roof_orientation: data.roofOrientation,
-    panel_count: results.panelCount,
-    total_wattage: results.totalWattage,
+  // Save to database
+  await prisma.solarCalculation.create({
+    data: {
+      email: data.email,
+      address: data.address,
+      roofLength: data.roofLength,
+      roofWidth: data.roofWidth,
+      roofPitch: data.roofPitch,
+      roofOrientation: data.roofOrientation,
+      panelCount: results.panelCount,
+      totalWattage: results.totalWattage,
+    },
   });
 
-  if (error) {
-    throw new Error('Failed to save calculation results');
-  }
+  // Send email
+  await sendCalculationEmail(data.email, {
+    panelCount: results.panelCount,
+    totalWattage: results.totalWattage,
+    address: data.address,
+  });
 }
