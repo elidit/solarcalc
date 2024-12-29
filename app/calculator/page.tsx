@@ -31,15 +31,9 @@ import { useToast } from "@/hooks/use-toast";
 const formSchema = z.object({
   email: z.string().email(),
   address: z.string().min(10, "Please enter a complete address"),
-  roofLength: z.string().transform(Number).pipe(
-    z.number().positive("Length must be greater than 0")
-  ),
-  roofWidth: z.string().transform(Number).pipe(
-    z.number().positive("Width must be greater than 0")
-  ),
-  roofPitch: z.string().transform(Number).pipe(
-    z.number().min(0).max(45, "Pitch must be between 0 and 45 degrees")
-  ),
+  roofLength: z.number().positive("Length must be greater than 0"),
+  roofWidth: z.number().positive("Width must be greater than 0"),
+  roofPitch: z.number().min(0).max(45, "Pitch must be between 0 and 45 degrees"),
   roofOrientation: z.enum([
     "north",
     "northeast",
@@ -48,9 +42,10 @@ const formSchema = z.object({
     "south",
     "southwest",
     "west",
-    "northwest"
+    "northwest",
   ]),
 });
+
 
 export default function Calculator() {
   const [isLoading, setIsLoading] = useState(false);
@@ -61,9 +56,9 @@ export default function Calculator() {
     defaultValues: {
       email: "",
       address: "",
-      roofLength: "",
-      roofWidth: "",
-      roofPitch: "",
+      roofLength: 0,
+      roofWidth: 0,
+      roofPitch: 0,
       roofOrientation: "south",
     },
   });
